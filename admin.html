@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ReplyDental Admin · Waitlist Dashboard</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Geist:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bone: #FAF7F2;
+      --tooth: #FEFEFC;
+      --sage: #6B8E7F;
+      --sage-deep: #4A6B5C;
+      --sage-light: #E8EFEA;
+      --coral: #E8927C;
+      --coral-soft: #F4D5C7;
+      --charcoal: #1A1F1C;
+      --charcoal-soft: #3A4140;
+      --gray-warm: #6E726F;
+      --gray-soft: #B8BAB7;
+      --line: rgba(26, 31, 28, 0.08);
+      --line-strong: rgba(26, 31, 28, 0.15);
+      --gold: #C9A961;
+      --red-soft: #E89A9A;
+      --blue-soft: #93B5C7;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Geist', -apple-system, sans-serif;
+      background: var(--bone);
+      color: var(--charcoal);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    /* === LOGIN SCREEN === */
+    .login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: var(--bone);
+    }
+
+    .login-screen.hidden {
+      display: none;
+    }
+
+    .login-card {
+      background: var(--tooth);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 48px 40px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 24px 60px -20px rgba(26, 31, 28, 0.15);
+      text-align: center;
+    }
+
+    .login-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 32px;
+      font-family: 'Fraunces', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--charcoal);
+    }
+
+    .login-mark {
+      width: 32px;
+      height: 32px;
+      background: var(--charcoal);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-mark::before {
+      content: "";
+      width: 14px;
+      height: 14px;
+      background: var(--coral);
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+    }
+
+    .login-title {
+      font-family: 'Fraunces', serif;
+      font-size: 28px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+
+    .login-sub {
+      color: var(--gray-warm);
+      font-size: 15px;
+      margin-bottom: 32px;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .login-input {
+      padding: 14px 18px;
+      border: 1px solid var(--line-strong);
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: inherit;
+      background: var(--bone);
+      color: var(--charcoal);
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    .login-input:focus {
+      border-color: var(--sage);
+    }
+
+    .login-btn {
+      padding: 14px 18px;
+      background: var(--charcoal);
+      color: var(--tooth);
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .login-btn:hover {
+      background: var(--sage-deep);
+    }
+
+    .login-error {
+      color: var(--coral);
+      font-size: 13px;
+      margin-top: 8px;
+      min-height: 18px;
+    }
+
+    /* === DASHBOARD === */
+    .dashboard {
+      display: none;
+      min-height: 100vh;
+    }
+
+    .dashboard.visible {
+      display: block;
+    }
+
+    .dash-header {
+      background: var(--tooth);
+      border-bottom: 1px solid var(--line);
+      padding: 18px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(20px);
+    }
+
+    .dash-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Fraunces', serif;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .dash-logo-mark {
+      width: 28px;
+      height: 28px;
+      background: var(--charcoal);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dash-logo-mark::before {
+      content: "";
+      width: 12px;
+      height: 12px;
+      background: var(--coral);
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+    }
+
+    .dash-tag {
+      background: var(--sage);
+      color: var(--tooth);
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-left: 6px;
+    }
+
+    .dash-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 9px 16px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      border: 1px solid var(--line-strong);
+      background: var(--tooth);
+      color: var(--charcoal);
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn:hover {
+      background: var(--bone);
+    }
+
+    .btn-primary {
+      background: var(--charcoal);
+      color: var(--tooth);
+      border-color: var(--charcoal);
+    }
+
+    .btn-primary:hover {
+      background: var(--sage-deep);
+      border-color: var(--sage-deep);
+    }
+
+    .btn-coral {
+      background: var(--coral);
+      color: var(--charcoal);
+      border-color: var(--coral);
+    }
+
+    .btn-coral:hover {
+      background: var(--coral-soft);
+    }
+
+    .dash-main {
+      padding: 32px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* === STATS === */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: var(--tooth);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 22px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-warm);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-family: 'Fraunces', serif;
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .stat-meta {
+      font-size: 12px;
+      color: var(--gray-warm);
+    }
+
+    .stat-meta.up {
+      color: var(--sage-deep);
+    }
+
+    /* === TOOLBAR === */
+    .toolbar {
+      background: var(--tooth);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 240px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 10px 14px 10px 36px;
+      border: 1px solid var(--line-strong);
+      border-radius: 100px;
+      font-size: 14px;
+      font-family: inherit;
+      background: var(--bone);
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--sage);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray-warm);
+      font-size: 14px;
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--bone);
+      padding: 4px;
+      border-radius: 100px;
+    }
+
+    .filter-tab {
+      padding: 7px 14px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--gray-warm);
+      border: none;
+      background: transparent;
+      font-family: inherit;
+    }
+
+    .filter-tab.active {
+      background: var(--charcoal);
+      color: var(--tooth);
+    }
+
+    /* === TABLE === */
+    .table-container {
+      background: var(--tooth);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .data-table thead {
+      background: var(--bone);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .data-table th {
+      padding: 14px 18px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray-warm);
+    }
+
+    .data-table td {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      font-size: 14px;
+    }
+
+    .data-table tbody tr {
+      transition: background 0.15s;
+    }
+
+    .data-table tbody tr:hover {
+      background: var(--bone);
+    }
+
+    .data-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .email-cell {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--charcoal);
+    }
+
+    .date-cell {
+      color: var(--gray-warm);
+      font-size: 13px;
+    }
+
+    .source-pill {
+      display: inline-block;
+      padding: 3px 10px;
+      background: var(--sage-light);
+      color: var(--sage-deep);
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+
+    .status-select {
+      padding: 5px 10px;
+      border: 1px solid var(--line-strong);
+      border-radius: 100px;
+      font-size: 12px;
+      font-family: inherit;
+      background: var(--tooth);
+      cursor: pointer;
+      outline: none;
+    }
+
+    .status-select.pending { color: var(--gray-warm); }
+    .status-select.contacted { color: var(--charcoal); background: #FFF8E1; }
+    .status-select.converted { color: var(--sage-deep); background: var(--sage-light); }
+    .status-select.unsubscribed { color: var(--gray-soft); }
+
+    .row-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .icon-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      border: 1px solid var(--line-strong);
+      background: var(--tooth);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      transition: all 0.2s;
+      color: var(--gray-warm);
+    }
+
+    .icon-btn:hover {
+      background: var(--bone);
+      color: var(--charcoal);
+    }
+
+    .icon-btn.danger:hover {
+      background: var(--coral);
+      color: var(--charcoal);
+      border-color: var(--coral);
+    }
+
+    /* === EMPTY STATE === */
+    .empty-state {
+      padding: 80px 32px;
+      text-align: center;
+    }
+
+    .empty-icon {
+      font-family: 'Fraunces', serif;
+      font-size: 48px;
+      color: var(--gray-soft);
+      margin-bottom: 16px;
+      font-style: italic;
+    }
+
+    .empty-title {
+      font-family: 'Fraunces', serif;
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--charcoal);
+      margin-bottom: 8px;
+    }
+
+    .empty-text {
+      color: var(--gray-warm);
+      font-size: 14px;
+      max-width: 360px;
+      margin: 0 auto;
+    }
+
+    /* === LOADING === */
+    .loading {
+      padding: 60px;
+      text-align: center;
+      color: var(--gray-warm);
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--line);
+      border-top-color: var(--sage);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 12px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* === TOAST === */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(120%);
+      background: var(--charcoal);
+      color: var(--tooth);
+      padding: 12px 20px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+      box-shadow: 0 12px 32px rgba(26, 31, 28, 0.2);
+      transition: transform 0.3s ease;
+      z-index: 100;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast.success { background: var(--sage-deep); }
+    .toast.error { background: var(--coral); color: var(--charcoal); }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 768px) {
+      .dash-header { padding: 16px 20px; }
+      .dash-main { padding: 20px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .data-table { font-size: 12px; }
+      .data-table th, .data-table td { padding: 10px 12px; }
+      .source-pill { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN SCREEN -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-card">
+      <div class="login-logo">
+        <span class="login-mark"></span>
+        ReplyDental
+      </div>
+      <h1 class="login-title">Admin Access</h1>
+      <p class="login-sub">Enter your password to continue</p>
+
+      <form class="login-form" onsubmit="handleLogin(event)">
+        <input
+          type="password"
+          class="login-input"
+          id="passwordInput"
+          placeholder="Password"
+          autocomplete="current-password"
+          required
+        />
+        <button type="submit" class="login-btn">Sign in</button>
+        <div class="login-error" id="loginError"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="dashboard" id="dashboard">
+
+    <header class="dash-header">
+      <div class="dash-logo">
+        <span class="dash-logo-mark"></span>
+        ReplyDental
+        <span class="dash-tag">Admin</span>
+      </div>
+      <div class="dash-actions">
+        <button class="btn" onclick="loadData()">↻ Refresh</button>
+        <button class="btn btn-primary" onclick="exportCSV()">↓ Export CSV</button>
+        <button class="btn" onclick="logout()">Sign out</button>
+      </div>
+    </header>
+
+    <main class="dash-main">
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total signups</div>
+          <div class="stat-value" id="statTotal">—</div>
+          <div class="stat-meta" id="statTotalMeta">All time</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Today</div>
+          <div class="stat-value" id="statToday">—</div>
+          <div class="stat-meta" id="statTodayMeta">New today</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">This week</div>
+          <div class="stat-value" id="statWeek">—</div>
+          <div class="stat-meta" id="statWeekMeta">Last 7 days</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Conversion ready</div>
+          <div class="stat-value" id="statContacted">—</div>
+          <div class="stat-meta" id="statContactedMeta">Contacted</div>
+        </div>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <div class="search-box">
+          <span class="search-icon">⌕</span>
+          <input
+            type="text"
+            class="search-input"
+            id="searchInput"
+            placeholder="Search by email..."
+            oninput="renderTable()"
+          />
+        </div>
+        <div class="filter-tabs">
+          <button class="filter-tab active" data-filter="all" onclick="setFilter('all')">All</button>
+          <button class="filter-tab" data-filter="pending" onclick="setFilter('pending')">Pending</button>
+          <button class="filter-tab" data-filter="contacted" onclick="setFilter('contacted')">Contacted</button>
+          <button class="filter-tab" data-filter="converted" onclick="setFilter('converted')">Converted</button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-container">
+        <div id="tableContent">
+          <div class="loading">
+            <div class="spinner"></div>
+            <div>Loading waitlist...</div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // === CONFIGURATION ===
+    const SUPABASE_URL = 'https://ydadzmxavcenqtuxytlx.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_vAmdk6VzVFnthhzxoerHNQ_HB8ZTLpS';
+    const ADMIN_PASSWORD = 'ReplyAdmin2026!';
+    const SESSION_KEY = 'replydental_admin_session';
+
+    // === STATE ===
+    let allData = [];
+    let currentFilter = 'all';
+
+    // === LOGIN ===
+    function checkSession() {
+      // Note: Browser sessionStorage check moved to in-memory only
+      // This page uses memory-based session
+      return false;
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const input = document.getElementById('passwordInput');
+      const errorEl = document.getElementById('loginError');
+      const password = input.value;
+
+      if (password === ADMIN_PASSWORD) {
+        showDashboard();
+        loadData();
+      } else {
+        errorEl.textContent = 'Wrong password. Try again.';
+        input.value = '';
+        input.focus();
+      }
+    }
+
+    function showDashboard() {
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('dashboard').classList.add('visible');
+    }
+
+    function logout() {
+      if (confirm('Sign out?')) {
+        document.getElementById('dashboard').classList.remove('visible');
+        document.getElementById('loginScreen').classList.remove('hidden');
+        document.getElementById('passwordInput').value = '';
+        document.getElementById('loginError').textContent = '';
+      }
+    }
+
+    // === DATA LOADING ===
+    async function loadData() {
+      const tableContent = document.getElementById('tableContent');
+      tableContent.innerHTML = '<div class="loading"><div class="spinner"></div><div>Loading waitlist...</div></div>';
+
+      try {
+        const response = await fetch(
+          `${SUPABASE_URL}/rest/v1/waitlist?select=*&order=created_at.desc`,
+          {
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        allData = await response.json();
+        updateStats();
+        renderTable();
+      } catch (error) {
+        console.error('Load error:', error);
+        tableContent.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">!</div>
+            <div class="empty-title">Failed to load</div>
+            <div class="empty-text">${error.message}. Check your Supabase connection.</div>
+          </div>
+        `;
+        showToast('Failed to load data', 'error');
+      }
+    }
+
+    // === STATS ===
+    function updateStats() {
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+      const weekAgo = today - (7 * 24 * 60 * 60 * 1000);
+
+      const total = allData.length;
+      const todayCount = allData.filter(r => new Date(r.created_at).getTime() >= today).length;
+      const weekCount = allData.filter(r => new Date(r.created_at).getTime() >= weekAgo).length;
+      const contactedCount = allData.filter(r => r.status === 'contacted' || r.status === 'converted').length;
+      const convertedCount = allData.filter(r => r.status === 'converted').length;
+
+      document.getElementById('statTotal').textContent = total;
+      document.getElementById('statToday').textContent = todayCount;
+      document.getElementById('statWeek').textContent = weekCount;
+      document.getElementById('statContacted').textContent = contactedCount;
+
+      document.getElementById('statTotalMeta').textContent = total === 0 ? 'No signups yet' : 'All time';
+      document.getElementById('statTodayMeta').textContent = todayCount === 0 ? 'Quiet day' : 'Today';
+      document.getElementById('statWeekMeta').textContent = `${weekCount} this week`;
+      document.getElementById('statContactedMeta').textContent = `${convertedCount} converted`;
+
+      const totalMeta = document.getElementById('statTotalMeta');
+      if (total >= 50) {
+        totalMeta.textContent = '🎯 Ready for MVP!';
+        totalMeta.classList.add('up');
+      }
+    }
+
+    // === FILTER & SEARCH ===
+    function setFilter(filter) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-tab').forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.filter === filter);
+      });
+      renderTable();
+    }
+
+    function getFilteredData() {
+      const search = document.getElementById('searchInput').value.toLowerCase().trim();
+      let filtered = allData;
+
+      if (currentFilter !== 'all') {
+        filtered = filtered.filter(r => r.status === currentFilter);
+      }
+
+      if (search) {
+        filtered = filtered.filter(r => r.email.toLowerCase().includes(search));
+      }
+
+      return filtered;
+    }
+
+    // === TABLE RENDER ===
+    function renderTable() {
+      const data = getFilteredData();
+      const tableContent = document.getElementById('tableContent');
+
+      if (data.length === 0) {
+        const isEmpty = allData.length === 0;
+        tableContent.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">${isEmpty ? '○' : '⌕'}</div>
+            <div class="empty-title">${isEmpty ? 'No signups yet' : 'No matches'}</div>
+            <div class="empty-text">${isEmpty ? 'Share your landing page and the first signups will appear here.' : 'Try a different search or filter.'}</div>
+          </div>
+        `;
+        return;
+      }
+
+      const rows = data.map(row => {
+        const date = new Date(row.created_at);
+        const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        const timeStr = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        const status = row.status || 'pending';
+
+        return `
+          <tr data-id="${row.id}">
+            <td class="email-cell">${escapeHtml(row.email)}</td>
+            <td class="date-cell">${dateStr} · ${timeStr}</td>
+            <td><span class="source-pill">${escapeHtml(row.source || 'unknown')}</span></td>
+            <td>
+              <select class="status-select ${status}" onchange="updateStatus('${row.id}', this.value)">
+                <option value="pending" ${status === 'pending' ? 'selected' : ''}>Pending</option>
+                <option value="contacted" ${status === 'contacted' ? 'selected' : ''}>Contacted</option>
+                <option value="converted" ${status === 'converted' ? 'selected' : ''}>Converted</option>
+                <option value="unsubscribed" ${status === 'unsubscribed' ? 'selected' : ''}>Unsubscribed</option>
+              </select>
+            </td>
+            <td>
+              <div class="row-actions">
+                <button class="icon-btn" onclick="copyEmail('${escapeHtml(row.email)}')" title="Copy email">⎘</button>
+                <button class="icon-btn danger" onclick="deleteRow('${row.id}', '${escapeHtml(row.email)}')" title="Delete">×</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      tableContent.innerHTML = `
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Signed up</th>
+              <th>Source</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+
+    // === ACTIONS ===
+    async function updateStatus(id, newStatus) {
+      try {
+        const response = await fetch(
+          `${SUPABASE_URL}/rest/v1/waitlist?id=eq.${id}`,
+          {
+            method: 'PATCH',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify({
+              status: newStatus,
+              contacted_at: newStatus === 'contacted' ? new Date().toISOString() : null
+            })
+          }
+        );
+
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+        const row = allData.find(r => r.id === id);
+        if (row) row.status = newStatus;
+        updateStats();
+
+        const select = document.querySelector(`tr[data-id="${id}"] .status-select`);
+        if (select) {
+          select.className = `status-select ${newStatus}`;
+        }
+
+        showToast(`Status updated to ${newStatus}`, 'success');
+      } catch (error) {
+        console.error('Update error:', error);
+        showToast('Failed to update', 'error');
+        loadData();
+      }
+    }
+
+    async function deleteRow(id, email) {
+      if (!confirm(`Delete ${email}?\n\nThis cannot be undone.`)) return;
+
+      try {
+        const response = await fetch(
+          `${SUPABASE_URL}/rest/v1/waitlist?id=eq.${id}`,
+          {
+            method: 'DELETE',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`
+            }
+          }
+        );
+
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+        allData = allData.filter(r => r.id !== id);
+        updateStats();
+        renderTable();
+        showToast('Deleted', 'success');
+      } catch (error) {
+        console.error('Delete error:', error);
+        showToast('Failed to delete', 'error');
+      }
+    }
+
+    function copyEmail(email) {
+      navigator.clipboard.writeText(email).then(() => {
+        showToast('Email copied', 'success');
+      }).catch(() => {
+        showToast('Copy failed', 'error');
+      });
+    }
+
+    // === CSV EXPORT ===
+    function exportCSV() {
+      if (allData.length === 0) {
+        showToast('No data to export', 'error');
+        return;
+      }
+
+      const headers = ['Email', 'Signed Up', 'Source', 'Status', 'Contacted At'];
+      const rows = allData.map(r => [
+        r.email,
+        new Date(r.created_at).toISOString(),
+        r.source || '',
+        r.status || 'pending',
+        r.contacted_at ? new Date(r.contacted_at).toISOString() : ''
+      ]);
+
+      const csv = [
+        headers.join(','),
+        ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+      ].join('\n');
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `replydental-waitlist-${new Date().toISOString().split('T')[0]}.csv`;
+      link.click();
+      URL.revokeObjectURL(url);
+
+      showToast(`Exported ${allData.length} entries`, 'success');
+    }
+
+    // === HELPERS ===
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function showToast(message, type = '') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = `toast show ${type}`;
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // Auto-focus password on load
+    document.getElementById('passwordInput').focus();
+  </script>
+
+</body>
+</html>
