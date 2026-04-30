@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ReplyDental — AI Review Replies for Modern Dental Practices</title>
+  <meta name="description" content="Turn every patient review into your next appointment. AI-powered, dental-specific responses that protect your reputation and grow your practice." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bone: #FAF7F2;
+      --tooth: #FEFEFC;
+      --sage: #6B8E7F;
+      --sage-deep: #4A6B5C;
+      --sage-light: #E8EFEA;
+      --coral: #E8927C;
+      --coral-soft: #F4D5C7;
+      --charcoal: #1A1F1C;
+      --charcoal-soft: #3A4140;
+      --gray-warm: #6E726F;
+      --gray-soft: #B8BAB7;
+      --line: rgba(26, 31, 28, 0.08);
+      --line-strong: rgba(26, 31, 28, 0.15);
+      --gold: #C9A961;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Geist', -apple-system, sans-serif;
+      background: var(--bone);
+      color: var(--charcoal);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* === NAV === */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(250, 247, 242, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .logo {
+      font-family: 'Fraunces', serif;
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--charcoal);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-mark {
+      width: 32px;
+      height: 32px;
+      background: var(--charcoal);
+      border-radius: 50%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-mark::before {
+      content: "";
+      width: 14px;
+      height: 14px;
+      background: var(--coral);
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--charcoal-soft);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--charcoal);
+    }
+
+    .nav-cta {
+      background: var(--charcoal);
+      color: var(--tooth);
+      padding: 10px 20px;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-1px);
+      background: var(--sage-deep);
+      color: var(--tooth) !important;
+    }
+
+    /* === HERO === */
+    .hero {
+      min-height: 100vh;
+      padding: 140px 40px 80px;
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      position: relative;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 100px;
+      right: -100px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--sage-light) 0%, transparent 70%);
+      border-radius: 50%;
+      z-index: -1;
+      opacity: 0.5;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 14px 6px 6px;
+      background: var(--tooth);
+      border: 1px solid var(--line);
+      border-radius: 100px;
+      font-size: 13px;
+      color: var(--charcoal-soft);
+      margin-bottom: 32px;
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .eyebrow-tag {
+      background: var(--sage);
+      color: var(--tooth);
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .hero-title {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(48px, 6vw, 76px);
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      line-height: 1.02;
+      margin-bottom: 28px;
+      animation: fadeInUp 0.6s ease-out 0.1s both;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--sage-deep);
+      font-weight: 500;
+    }
+
+    .hero-title .accent {
+      position: relative;
+      display: inline-block;
+    }
+
+    .hero-title .accent::after {
+      content: "";
+      position: absolute;
+      bottom: 4px;
+      left: 0;
+      width: 100%;
+      height: 12px;
+      background: var(--coral-soft);
+      z-index: -1;
+      border-radius: 4px;
+    }
+
+    .hero-sub {
+      font-size: 19px;
+      line-height: 1.55;
+      color: var(--charcoal-soft);
+      margin-bottom: 40px;
+      max-width: 540px;
+      animation: fadeInUp 0.6s ease-out 0.2s both;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+      animation: fadeInUp 0.6s ease-out 0.3s both;
+    }
+
+    .btn-primary {
+      background: var(--charcoal);
+      color: var(--tooth);
+      padding: 16px 28px;
+      border-radius: 100px;
+      font-size: 15px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(26, 31, 28, 0.2);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--charcoal);
+      padding: 16px 24px;
+      border-radius: 100px;
+      font-size: 15px;
+      font-weight: 500;
+      border: 1px solid var(--line-strong);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-secondary:hover {
+      background: var(--tooth);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+      animation: fadeInUp 0.6s ease-out 0.4s both;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-num {
+      font-family: 'Fraunces', serif;
+      font-size: 32px;
+      font-weight: 500;
+      color: var(--charcoal);
+      letter-spacing: -0.02em;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--gray-warm);
+      margin-top: 2px;
+    }
+
+    /* === HERO VISUAL: Live Review Demo === */
+    .hero-visual {
+      position: relative;
+      animation: fadeInUp 0.8s ease-out 0.3s both;
+    }
+
+    .review-card {
+      background: var(--tooth);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 24px 60px -20px rgba(26, 31, 28, 0.15), 0 8px 16px -8px rgba(26, 31, 28, 0.06);
+      position: relative;
+    }
+
+    .review-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .review-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--coral) 0%, var(--coral-soft) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--tooth);
+      font-weight: 600;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .review-meta-info {
+      flex: 1;
+    }
+
+    .review-author {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--charcoal);
+    }
+
+    .review-date {
+      font-size: 12px;
+      color: var(--gray-warm);
+      margin-top: 1px;
+    }
+
+    .review-stars {
+      color: var(--gold);
+      letter-spacing: 1px;
+      font-size: 14px;
+    }
+
+    .review-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: var(--gray-warm);
+      margin-top: 4px;
+    }
+
+    .review-source-dot {
+      width: 6px;
+      height: 6px;
+      background: #4285F4;
+      border-radius: 50%;
+    }
+
+    .review-text {
+      font-size: 14.5px;
+      line-height: 1.55;
+      color: var(--charcoal-soft);
+      padding: 14px 16px;
+      background: var(--bone);
+      border-radius: 12px;
+      border-left: 2px solid var(--sage);
+    }
+
+    .ai-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 16px 0;
+      font-size: 12px;
+      color: var(--sage-deep);
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .ai-arrow::before,
+    .ai-arrow::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--line-strong);
+    }
+
+    .ai-pulse {
+      width: 8px;
+      height: 8px;
+      background: var(--sage);
+      border-radius: 50%;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.4); }
+    }
+
+    .reply-card {
+      background: var(--charcoal);
+      border-radius: 20px;
+      padding: 24px;
+      color: var(--tooth);
+      box-shadow: 0 24px 60px -20px rgba(26, 31, 28, 0.25);
+    }
+
+    .reply-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .reply-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: rgba(232, 146, 124, 0.15);
+      border: 1px solid rgba(232, 146, 124, 0.3);
+      border-radius: 100px;
+      font-size: 11px;
+      color: var(--coral);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .reply-text {
+      font-size: 14.5px;
+      line-height: 1.6;
+      color: rgba(254, 254, 252, 0.92);
+      font-family: 'Fraunces', serif;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+    }
+
+    .reply-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(254, 254, 252, 0.1);
+    }
+
+    .reply-action-btn {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .reply-action-btn.approve {
+      background: var(--coral);
+      color: var(--charcoal);
+    }
+
+    .reply-action-btn.approve:hover {
+      background: var(--tooth);
+    }
+
+    .reply-action-btn.regen {
+      background: rgba(254, 254, 252, 0.08);
+      color: var(--tooth);
+      border: 1px solid rgba(254, 254, 252, 0.15);
+    }
+
+    .reply-action-btn.regen:hover {
+      background: rgba(254, 254, 252, 0.15);
+    }
+
+    /* Floating decorative element */
+    .floating-tag {
+      position: absolute;
+      background: var(--tooth);
+      border: 1px solid var(--line);
+      border-radius: 100px;
+      padding: 8px 14px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--charcoal);
+      box-shadow: 0 8px 20px rgba(26, 31, 28, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .floating-tag.tag-1 {
+      top: -20px;
+      right: 20px;
+      animation: floatUp 3s ease-in-out infinite;
+    }
+
+    .floating-tag.tag-2 {
+      bottom: 60px;
+      left: -30px;
+      animation: floatUp 3s ease-in-out infinite 1.5s;
+    }
+
+    @keyframes floatUp {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .tag-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .tag-1 .tag-dot { background: var(--sage); }
+    .tag-2 .tag-dot { background: var(--coral); }
+
+    /* === SOCIAL PROOF === */
+    .social-proof {
+      padding: 60px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .social-proof-label {
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gray-warm);
+      margin-bottom: 28px;
+      font-weight: 500;
+    }
+
+    .logos {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 56px;
+      flex-wrap: wrap;
+      opacity: 0.6;
+    }
+
+    .logo-item {
+      font-family: 'Fraunces', serif;
+      font-size: 22px;
+      color: var(--charcoal-soft);
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+
+    /* === PROBLEM SECTION === */
+    .section {
+      padding: 120px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-eyebrow {
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--sage);
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(36px, 4.5vw, 56px);
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: 24px;
+      max-width: 800px;
+    }
+
+    .section-title em {
+      font-style: italic;
+      color: var(--sage-deep);
+    }
+
+    .section-sub {
+      font-size: 18px;
+      color: var(--charcoal-soft);
+      max-width: 600px;
+      line-height: 1.55;
+      margin-bottom: 64px;
+    }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .problem-card {
+      padding: 32px;
+      background: var(--tooth);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .problem-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px -10px rgba(26, 31, 28, 0.1);
+    }
+
+    .problem-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--sage-light);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-family: 'Fraunces', serif;
+      font-size: 22px;
+      color: var(--sage-deep);
+      font-weight: 600;
+    }
+
+    .problem-title {
+      font-family: 'Fraunces', serif;
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--charcoal);
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+
+    .problem-desc {
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--charcoal-soft);
+    }
+
+    /* === HOW IT WORKS === */
+    .how-section {
+      background: var(--charcoal);
+      color: var(--tooth);
+      padding: 120px 40px;
+      margin: 80px 20px;
+      border-radius: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .how-section::before {
+      content: "";
+      position: absolute;
+      top: -200px;
+      right: -200px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(232, 146, 124, 0.15) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .how-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .how-title {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(36px, 4.5vw, 56px);
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: 16px;
+      color: var(--tooth);
+    }
+
+    .how-title em {
+      font-style: italic;
+      color: var(--coral);
+    }
+
+    .how-sub {
+      font-size: 18px;
+      color: rgba(254, 254, 252, 0.7);
+      margin-bottom: 80px;
+      max-width: 600px;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 60px;
+      position: relative;
+    }
+
+    .steps::before {
+      content: "";
+      position: absolute;
+      top: 36px;
+      left: 8%;
+      right: 8%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(254, 254, 252, 0.2), transparent);
+    }
+
+    .step {
+      position: relative;
+    }
+
+    .step-num {
+      width: 72px;
+      height: 72px;
+      background: var(--charcoal);
+      border: 1px solid rgba(254, 254, 252, 0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Fraunces', serif;
+      font-size: 28px;
+      color: var(--coral);
+      margin-bottom: 28px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .step-title {
+      font-family: 'Fraunces', serif;
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--tooth);
+      margin-bottom: 12px;
+      letter-spacing: -0.01em;
+    }
+
+    .step-desc {
+      font-size: 15px;
+      line-height: 1.6;
+      color: rgba(254, 254, 252, 0.7);
+    }
+
+    /* === PRICING === */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .price-card {
+      background: var(--tooth);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 36px 32px;
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .price-card.featured {
+      background: var(--charcoal);
+      color: var(--tooth);
+      transform: scale(1.03);
+      box-shadow: 0 32px 64px -20px rgba(26, 31, 28, 0.3);
+      border: none;
+      position: relative;
+    }
+
+    .featured-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--coral);
+      color: var(--charcoal);
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .price-tier {
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--sage-deep);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .price-card.featured .price-tier {
+      color: var(--coral);
+    }
+
+    .price-amount {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+      margin-bottom: 8px;
+    }
+
+    .price-num {
+      font-family: 'Fraunces', serif;
+      font-size: 56px;
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    .price-period {
+      color: var(--gray-warm);
+      font-size: 15px;
+    }
+
+    .price-card.featured .price-period {
+      color: rgba(254, 254, 252, 0.6);
+    }
+
+    .price-desc {
+      font-size: 14px;
+      color: var(--charcoal-soft);
+      margin-bottom: 28px;
+    }
+
+    .price-card.featured .price-desc {
+      color: rgba(254, 254, 252, 0.7);
+    }
+
+    .price-features {
+      list-style: none;
+      margin-bottom: 32px;
+      flex: 1;
+    }
+
+    .price-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 0;
+      font-size: 14.5px;
+      color: var(--charcoal-soft);
+    }
+
+    .price-card.featured .price-features li {
+      color: rgba(254, 254, 252, 0.85);
+    }
+
+    .check {
+      color: var(--sage);
+      font-weight: 600;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .price-card.featured .check {
+      color: var(--coral);
+    }
+
+    .price-cta {
+      display: block;
+      text-align: center;
+      padding: 14px 24px;
+      border-radius: 100px;
+      font-size: 14.5px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid var(--charcoal);
+      background: transparent;
+      color: var(--charcoal);
+      transition: all 0.2s;
+    }
+
+    .price-cta:hover {
+      background: var(--charcoal);
+      color: var(--tooth);
+    }
+
+    .price-card.featured .price-cta {
+      background: var(--coral);
+      color: var(--charcoal);
+      border-color: var(--coral);
+    }
+
+    .price-card.featured .price-cta:hover {
+      background: var(--tooth);
+      border-color: var(--tooth);
+    }
+
+    /* === WAITLIST CTA === */
+    .waitlist-section {
+      padding: 140px 40px;
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+    }
+
+    .waitlist-section::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, var(--sage-light) 0%, transparent 60%);
+      border-radius: 50%;
+      z-index: -1;
+      opacity: 0.4;
+    }
+
+    .waitlist-title {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(40px, 5vw, 64px);
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: 20px;
+    }
+
+    .waitlist-title em {
+      font-style: italic;
+      color: var(--sage-deep);
+    }
+
+    .waitlist-sub {
+      font-size: 18px;
+      color: var(--charcoal-soft);
+      margin-bottom: 40px;
+    }
+
+    .waitlist-form {
+      display: flex;
+      gap: 8px;
+      max-width: 500px;
+      margin: 0 auto 24px;
+      background: var(--tooth);
+      padding: 6px;
+      border-radius: 100px;
+      border: 1px solid var(--line);
+      box-shadow: 0 8px 24px rgba(26, 31, 28, 0.06);
+    }
+
+    .waitlist-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      padding: 14px 20px;
+      font-size: 15px;
+      font-family: inherit;
+      background: transparent;
+      color: var(--charcoal);
+    }
+
+    .waitlist-input::placeholder {
+      color: var(--gray-soft);
+    }
+
+    .waitlist-submit {
+      background: var(--charcoal);
+      color: var(--tooth);
+      border: none;
+      padding: 14px 24px;
+      border-radius: 100px;
+      font-size: 14.5px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .waitlist-submit:hover {
+      background: var(--sage-deep);
+    }
+
+    .waitlist-perks {
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+      font-size: 13px;
+      color: var(--gray-warm);
+    }
+
+    .perk {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .perk-check {
+      color: var(--sage);
+      font-weight: 600;
+    }
+
+    /* === FOOTER === */
+    .footer {
+      padding: 60px 40px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      border-top: 1px solid var(--line);
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .footer-text {
+      font-size: 13px;
+      color: var(--gray-warm);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 28px;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      color: var(--gray-warm);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--charcoal);
+    }
+
+    /* === ANIMATIONS === */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 1024px) {
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 60px;
+        padding-top: 120px;
+      }
+      .problem-grid,
+      .pricing-grid,
+      .steps {
+        grid-template-columns: 1fr;
+      }
+      .steps::before { display: none; }
+      .price-card.featured {
+        transform: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav { padding: 16px 20px; }
+      .nav-links a:not(.nav-cta) { display: none; }
+      .hero { padding: 100px 20px 60px; gap: 40px; }
+      .section { padding: 80px 20px; }
+      .how-section { padding: 80px 20px; margin: 60px 10px; }
+      .waitlist-section { padding: 100px 20px; }
+      .footer { padding: 40px 20px; }
+      .hero-stats { gap: 24px; }
+      .stat-num { font-size: 26px; }
+      .floating-tag { display: none; }
+      .waitlist-form { flex-direction: column; border-radius: 24px; }
+      .waitlist-submit { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="#" class="logo">
+      <span class="logo-mark"></span>
+      ReplyDental
+    </a>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#waitlist" class="nav-cta">Get early access</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="eyebrow-tag">New</span>
+        Built specifically for dental practices
+      </div>
+
+      <h1 class="hero-title">
+        Turn every patient<br>
+        review into your<br>
+        <em>next</em> <span class="accent">appointment.</span>
+      </h1>
+
+      <p class="hero-sub">
+        AI-powered review responses, written in your voice — so you protect your reputation, rank higher on Google, and get more new patients without lifting a finger.
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="#waitlist" class="btn-primary">
+          Join the waitlist
+          <span style="font-size: 18px;">→</span>
+        </a>
+        <a href="#how" class="btn-secondary">See how it works</a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-num">14 days</div>
+          <div class="stat-label">Free trial</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">&lt; 5 min</div>
+          <div class="stat-label">Setup time</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Dental-specific</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HERO VISUAL -->
+    <div class="hero-visual">
+      <div class="floating-tag tag-1">
+        <span class="tag-dot"></span>
+        4.9★ avg rating
+      </div>
+
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar">SM</div>
+          <div class="review-meta-info">
+            <div class="review-author">Sarah Mitchell</div>
+            <div class="review-date">2 hours ago</div>
+            <div class="review-source">
+              <span class="review-source-dot"></span>
+              Google Reviews
+            </div>
+          </div>
+          <div class="review-stars">★★★★★</div>
+        </div>
+        <p class="review-text">
+          Dr. Chen and her team made my root canal completely painless. I've been terrified of dentists my whole life, but they explained everything and made me feel so comfortable. Highly recommend!
+        </p>
+      </div>
+
+      <div class="ai-arrow">
+        <span class="ai-pulse"></span>
+        AI Generated · 3.2s
+      </div>
+
+      <div class="reply-card">
+        <div class="reply-header">
+          <span class="reply-badge">
+            <span style="width: 6px; height: 6px; background: var(--coral); border-radius: 50%;"></span>
+            Suggested Reply
+          </span>
+        </div>
+        <p class="reply-text">
+          Sarah, thank you so much for sharing this — it means the world to us. Helping anxious patients feel safe is exactly why we do what we do. Looking forward to seeing you at your next visit!
+        </p>
+        <div class="reply-actions">
+          <button class="reply-action-btn approve">Approve & Post</button>
+          <button class="reply-action-btn regen">↻ Regenerate</button>
+        </div>
+      </div>
+
+      <div class="floating-tag tag-2">
+        <span class="tag-dot"></span>
+        +47 new patients
+      </div>
+    </div>
+  </section>
+
+  <!-- SOCIAL PROOF -->
+  <section class="social-proof">
+    <div class="social-proof-label">Trusted by progressive dental practices</div>
+    <div class="logos">
+      <div class="logo-item">Northside Dental</div>
+      <div class="logo-item">Bright Smile Co.</div>
+      <div class="logo-item">Modern Dentistry</div>
+      <div class="logo-item">Elm Street Dental</div>
+      <div class="logo-item">Pacific Smiles</div>
+    </div>
+  </section>
+
+  <!-- PROBLEM SECTION -->
+  <section class="section">
+    <div class="section-eyebrow">The reality</div>
+    <h2 class="section-title">
+      Your reviews are <em>silently</em><br>
+      costing you patients.
+    </h2>
+    <p class="section-sub">
+      75% of new patients check Google before booking. Practices with thoughtful, timely review responses see up to 30% more bookings — but who has time to write 40 personal replies a month?
+    </p>
+
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="problem-icon">01</div>
+        <h3 class="problem-title">Time you don't have</h3>
+        <p class="problem-desc">
+          Writing personal responses to every review takes 5-10 hours a month. Time better spent with patients in the chair.
+        </p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">02</div>
+        <h3 class="problem-title">Generic replies hurt SEO</h3>
+        <p class="problem-desc">
+          Copy-paste responses tell Google your practice is run on autopilot. Your local rankings drop. Competitors win.
+        </p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">03</div>
+        <h3 class="problem-title">Negative reviews fester</h3>
+        <p class="problem-desc">
+          Every hour an unaddressed 1-star review sits there, you lose another potential patient. Most practices respond too late.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-section" id="how">
+    <div class="how-inner">
+      <div class="section-eyebrow" style="color: var(--coral);">How it works</div>
+      <h2 class="how-title">
+        From review to reply<br>
+        in <em>under 60 seconds.</em>
+      </h2>
+      <p class="how-sub">
+        Connect once. We handle the rest — quietly, professionally, in your voice.
+      </p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3 class="step-title">Connect Google Business</h3>
+          <p class="step-desc">
+            One click. We fetch all your reviews — past and future — automatically. No exports, no manual setup.
+          </p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3 class="step-title">AI drafts your reply</h3>
+          <p class="step-desc">
+            Trained specifically on dental practice tone — empathetic, professional, HIPAA-aware. Three options per review.
+          </p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3 class="step-title">You approve. We post.</h3>
+          <p class="step-desc">
+            One tap to publish. Or set it on full auto for 4-5 star reviews. Negative reviews always require your eyes.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="section" id="pricing">
+    <div class="section-eyebrow">Simple pricing</div>
+    <h2 class="section-title">
+      Less than the cost of <em>one</em><br>
+      missed appointment per month.
+    </h2>
+    <p class="section-sub">
+      Start with a 14-day free trial. No credit card required.
+    </p>
+
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-tier">Starter</div>
+        <div class="price-amount">
+          <span class="price-num">$79</span>
+          <span class="price-period">/month</span>
+        </div>
+        <p class="price-desc">For solo practices just getting started.</p>
+        <ul class="price-features">
+          <li><span class="check">✓</span> 1 location</li>
+          <li><span class="check">✓</span> Up to 50 reviews/month</li>
+          <li><span class="check">✓</span> AI reply suggestions (3 per review)</li>
+          <li><span class="check">✓</span> Email notifications</li>
+          <li><span class="check">✓</span> Basic analytics</li>
+        </ul>
+        <a href="#waitlist" class="price-cta">Start free trial</a>
+      </div>
+
+      <div class="price-card featured">
+        <span class="featured-badge">Most Popular</span>
+        <div class="price-tier">Professional</div>
+        <div class="price-amount">
+          <span class="price-num">$149</span>
+          <span class="price-period">/month</span>
+        </div>
+        <p class="price-desc">For growing practices that take reputation seriously.</p>
+        <ul class="price-features">
+          <li><span class="check">✓</span> 1 location</li>
+          <li><span class="check">✓</span> Unlimited reviews</li>
+          <li><span class="check">✓</span> Custom voice & tone</li>
+          <li><span class="check">✓</span> Instant negative review alerts</li>
+          <li><span class="check">✓</span> Slack integration</li>
+          <li><span class="check">✓</span> Advanced analytics</li>
+          <li><span class="check">✓</span> Priority support</li>
+        </ul>
+        <a href="#waitlist" class="price-cta">Start free trial</a>
+      </div>
+
+      <div class="price-card">
+        <div class="price-tier">Multi-Location</div>
+        <div class="price-amount">
+          <span class="price-num">$299</span>
+          <span class="price-period">/month</span>
+        </div>
+        <p class="price-desc">For DSOs and multi-location groups.</p>
+        <ul class="price-features">
+          <li><span class="check">✓</span> Up to 5 locations</li>
+          <li><span class="check">✓</span> Everything in Professional</li>
+          <li><span class="check">✓</span> Location comparison dashboard</li>
+          <li><span class="check">✓</span> Manager roles & permissions</li>
+          <li><span class="check">✓</span> API access</li>
+          <li><span class="check">✓</span> Dedicated success manager</li>
+        </ul>
+        <a href="#waitlist" class="price-cta">Talk to us</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- WAITLIST CTA -->
+  <section class="waitlist-section" id="waitlist">
+    <h2 class="waitlist-title">
+      Be among the <em>first 100</em><br>
+      practices to launch.
+    </h2>
+    <p class="waitlist-sub">
+      Founding members get 50% off for life. Join the waitlist below.
+    </p>
+
+    <form class="waitlist-form" onsubmit="handleSubmit(event)">
+      <input
+        type="email"
+        class="waitlist-input"
+        placeholder="dr.smith@yourpractice.com"
+        required
+      />
+      <button type="submit" class="waitlist-submit">Reserve my spot</button>
+    </form>
+
+    <div class="waitlist-perks">
+      <div class="perk">
+        <span class="perk-check">✓</span> 50% off lifetime
+      </div>
+      <div class="perk">
+        <span class="perk-check">✓</span> Priority onboarding
+      </div>
+      <div class="perk">
+        <span class="perk-check">✓</span> No spam, ever
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-text">
+        © 2026 ReplyDental. Built for dentists, by people who care.
+      </div>
+      <div class="footer-links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="mailto:hello@replydental.com">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // === SUPABASE CONFIGURATION ===
+    const SUPABASE_URL = 'https://ydadzmxavcenqtuxytlx.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_vAmdk6VzVFnthhzxoerHNQ_HB8ZTLpS';
+
+    async function handleSubmit(e) {
+      e.preventDefault();
+      const input = e.target.querySelector('input');
+      const button = e.target.querySelector('button');
+      const email = input.value.trim().toLowerCase();
+
+      // Basic email validation
+      if (!email || !email.includes('@')) {
+        showError(button, input, 'Please enter a valid email');
+        return;
+      }
+
+      // Disable form during submission
+      button.disabled = true;
+      input.disabled = true;
+      button.textContent = 'Reserving...';
+      button.style.background = 'var(--sage-deep)';
+
+      try {
+        // Send to Supabase
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/waitlist`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({
+            email: email,
+            source: 'landing_page',
+            user_agent: navigator.userAgent,
+            metadata: {
+              referrer: document.referrer || 'direct',
+              screen_width: window.screen.width,
+              language: navigator.language
+            }
+          })
+        });
+
+        if (response.ok || response.status === 201) {
+          // Success!
+          showSuccess(button, input, email);
+        } else if (response.status === 409) {
+          // Duplicate email
+          showError(button, input, "You're already on the list! 🎉");
+        } else {
+          // Other error - try to read error message
+          const errorData = await response.json().catch(() => ({}));
+          if (errorData.code === '23505') {
+            showError(button, input, "You're already on the list! 🎉");
+          } else {
+            console.error('Supabase error:', errorData);
+            showError(button, input, 'Something went wrong. Please try again.');
+          }
+        }
+      } catch (error) {
+        console.error('Network error:', error);
+        showError(button, input, 'Network error. Please try again.');
+      }
+    }
+
+    function showSuccess(button, input, email) {
+      button.disabled = false;
+      input.disabled = false;
+      button.textContent = "✓ You're in!";
+      button.style.background = 'var(--sage)';
+      input.value = '';
+      input.placeholder = `See you soon at ${email.split('@')[1] || email}`;
+
+      setTimeout(() => {
+        button.textContent = 'Reserve my spot';
+        button.style.background = '';
+        input.placeholder = 'dr.smith@yourpractice.com';
+      }, 5000);
+    }
+
+    function showError(button, input, message) {
+      button.disabled = false;
+      input.disabled = false;
+      button.textContent = message;
+      button.style.background = 'var(--coral)';
+
+      setTimeout(() => {
+        button.textContent = 'Reserve my spot';
+        button.style.background = '';
+      }, 4000);
+    }
+  </script>
+
+</body>
+</html>
